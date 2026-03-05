@@ -34,7 +34,12 @@ const PizzaCard = ({ pizza }: PizzaCardProps) => {
           alt={pizza.name}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300" />
+        
+        <div className="absolute bottom-3 left-3 lg:hidden flex items-center gap-1 text-white text-[10px] font-black uppercase tracking-widest">
+           <Info size={12} className="text-orange-400" />
+           <span>Tap for Details</span>
+        </div>
         
         <div className="absolute top-3 left-3 flex flex-col gap-2">
           {pizza.isRecommended && (

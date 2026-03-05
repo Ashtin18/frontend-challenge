@@ -1,5 +1,12 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import orderReducer, { addToOrder, removeFromOrder, updateQuantity, clearOrder } from '../orderSlice.ts';
+import orderReducer, { 
+  addToOrder, 
+  removeFromOrder, 
+  updateQuantity, 
+  clearOrder,
+  toggleCart,
+  setCartOpen
+} from '../orderSlice.ts';
 import type { Pizza } from '../../types/index.ts';
 
 const mockPizza: Pizza = {
@@ -26,6 +33,7 @@ describe('orderSlice reducer', () => {
     currentOrder: [],
     orderHistory: [],
     loading: false,
+    isCartOpen: false,
   };
 
   it('should handle adding a pizza to the order', () => {
@@ -82,5 +90,18 @@ describe('orderSlice reducer', () => {
     const newState = orderReducer(stateWithOne, clearOrder());
 
     expect(newState.currentOrder).toHaveLength(0);
+  });
+
+  it('should toggle cart visibility', () => {
+    const stateA = orderReducer(initialState, toggleCart());
+    expect(stateA.isCartOpen).toBe(true);
+    
+    const stateB = orderReducer(stateA, toggleCart());
+    expect(stateB.isCartOpen).toBe(false);
+  });
+
+  it('should set cart visibility explicitly', () => {
+    const state = orderReducer(initialState, setCartOpen(true));
+    expect(state.isCartOpen).toBe(true);
   });
 });

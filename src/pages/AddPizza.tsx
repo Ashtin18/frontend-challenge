@@ -83,13 +83,12 @@ const AddPizza = () => {
             animate={{ opacity: 1, y: 0 }}
             className="sticky top-24"
           >
-            <h1 className="text-5xl font-black text-gray-900 leading-none mb-6 tracking-tighter uppercase">
-              Add a <span className="text-orange-600 italic">Chef's</span> <br />Special
-            </h1>
-            <p className="text-gray-500 mb-8 font-medium">
-              Create a new masterpiece and add it to our world-class menu. 
-              Be sure to use High-Quality images!
-            </p>
+            <div className="mb-12 text-center lg:text-left">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900 leading-none mb-4 tracking-tighter uppercase">
+                CREATE <span className="text-orange-600 underline decoration-4 md:decoration-8 decoration-orange-200 underline-offset-4 md:underline-offset-8">PIZZA</span>
+              </h1>
+              <p className="text-lg md:text-xl text-gray-500 font-medium italic">"Design your masterpiece and join our menu."</p>
+            </div>
             
             <div className="bg-white/60 backdrop-blur-md p-6 rounded-3xl border border-white/20 shadow-xl">
               <div className="flex items-center gap-4 text-gray-900 mb-6 font-black uppercase tracking-tighter text-sm">

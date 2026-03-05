@@ -5,7 +5,7 @@ import type { OrderItem, Order } from '../../types/index.ts';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 
-const OrderSummary = () => {
+const OrderSummary = ({ isInModal = false }: { isInModal?: boolean }) => {
   const dispatch = useAppDispatch();
   const { currentOrder, loading } = useAppSelector((state) => state.order);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -44,7 +44,7 @@ const OrderSummary = () => {
   };
 
   return (
-    <div className="bg-white/40 backdrop-blur-xl border border-white/20 shadow-2xl rounded-3xl overflow-hidden sticky top-24">
+    <div className={`bg-white/40 backdrop-blur-xl border border-white/20 shadow-2xl rounded-3xl overflow-hidden ${isInModal ? '' : 'sticky top-24'}`}>
       {/* Header */}
       <div className="bg-linear-to-r from-orange-500 to-red-600 p-6">
         <div className="flex items-center justify-between text-white">

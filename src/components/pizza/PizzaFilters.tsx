@@ -10,7 +10,7 @@ const PizzaFilters = () => {
   const filters = useAppSelector((state) => state.pizza.filters);
 
   return (
-    <div className="bg-white/70 backdrop-blur-md p-6 rounded-3xl border border-white/20 shadow-xl mb-12 flex flex-col lg:flex-row items-center gap-6">
+    <div className="bg-white/70 backdrop-blur-md p-4 sm:p-6 rounded-3xl border border-white/20 shadow-xl mb-8 md:mb-12 flex flex-col lg:flex-row items-center gap-4 md:gap-6">
       {/* Search Input */}
       <div className="relative grow w-full">
         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">

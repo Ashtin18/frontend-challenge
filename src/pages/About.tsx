@@ -55,8 +55,8 @@ const About = () => {
         >
           <Code2 className="text-orange-600 h-8 w-8" />
         </motion.div>
-        <h1 className="text-6xl font-black text-gray-900 leading-none mb-6 tracking-tighter uppercase">
-          Technical <span className="text-orange-600 underline decoration-8 decoration-orange-200 underline-offset-8">Overview</span>
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900 leading-none mb-6 tracking-tighter uppercase">
+          Technical <span className="text-orange-600 underline decoration-4 md:decoration-8 decoration-orange-200 underline-offset-4 md:underline-offset-8">Overview</span>
         </h1>
         <p className="text-xl text-gray-500 font-medium max-w-2xl mx-auto leading-relaxed">
           This project represents a state-of-the-art frontend architecture designed for performance, scalability, and an exceptional user experience.

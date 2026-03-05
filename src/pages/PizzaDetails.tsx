@@ -137,12 +137,12 @@ const PizzaDetails = () => {
              </span>
           </div>
 
-          <h1 className="text-6xl font-black text-gray-900 tracking-tighter leading-none mb-6 uppercase">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900 tracking-tighter leading-none mb-6 uppercase">
             {pizza.name}
           </h1>
 
           <div className="flex items-center gap-6 mb-8">
-            <div className="text-5xl font-black text-orange-600 tracking-tighter">
+            <div className="text-4xl sm:text-5xl font-black text-orange-600 tracking-tighter">
               ${pizza.price.toFixed(2)}
             </div>
             <div className="h-10 w-px bg-gray-200" />
@@ -166,85 +166,87 @@ const PizzaDetails = () => {
           </div>
 
           {/* Action Box */}
-          <div className="mt-auto bg-gray-900 p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
-            <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl" />
-            
-            <div className="relative flex flex-col gap-8">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-gray-400 text-[10px] font-black uppercase tracking-widest mb-1">Select Quantity</p>
-                  <div className="flex items-center gap-4 bg-white/10 p-2 rounded-2xl border border-white/10">
-                    <button 
-                      onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                      className="text-white hover:text-orange-500 transition-colors p-1"
-                    >
-                      <Minus size={20} />
-                    </button>
-                    <span className="text-2xl font-black text-white w-8 text-center tabular-nums">{quantity}</span>
-                    <button 
-                      onClick={() => setQuantity(q => q + 1)}
-                      className="text-white hover:text-orange-500 transition-colors p-1"
-                    >
-                      <Plus size={20} />
-                    </button>
-                  </div>
-                </div>
-                
-                <div className="text-right flex flex-col items-end">
-                  <p className="text-gray-400 text-[10px] font-black uppercase tracking-widest mb-1">Total</p>
-                  <div className="flex flex-col items-end">
-                    {quantity >= 3 && (
-                      <span className="text-orange-400 text-[10px] font-black line-through opacity-50">
-                        ${(pizza.price * quantity).toFixed(2)}
-                      </span>
-                    )}
-                    <p className="text-4xl font-black text-white tabular-nums">
-                      ${(quantity >= 3 ? (pizza.price * quantity * 0.9) : (pizza.price * quantity)).toFixed(2)}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <AnimatePresence>
-                {quantity >= 3 && (
-                  <motion.div 
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    className="overflow-hidden"
-                  >
-                    <div className="flex items-center gap-3 bg-orange-500/10 border border-orange-500/20 p-3 rounded-xl text-orange-500">
-                      <Tag size={16} />
-                      <span className="text-[10px] font-black uppercase tracking-wider">
-                        10% Bulk Discount Applied! (3+ Pizzas)
-                      </span>
+          <div className="lg:block fixed lg:relative bottom-0 left-0 right-0 z-40 lg:z-auto bg-white lg:bg-transparent p-4 lg:p-0 border-t lg:border-t-0 border-gray-100 lg:mt-auto">
+            <div className="bg-gray-900 p-6 md:p-8 rounded-4xl lg:rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
+              <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl opacity-50 group-hover:opacity-100 transition-opacity" />
+              
+              <div className="relative flex flex-col gap-6 lg:gap-8">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-gray-400 text-[10px] font-black uppercase tracking-widest mb-1">Quantity</p>
+                    <div className="flex items-center gap-3 sm:gap-4 bg-white/10 p-1.5 sm:p-2 rounded-2xl border border-white/10">
+                      <button 
+                        onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                        className="text-white hover:text-orange-500 transition-colors p-1"
+                      >
+                        <Minus size={18} />
+                      </button>
+                      <span className="text-xl sm:text-2xl font-black text-white w-6 sm:w-8 text-center tabular-nums">{quantity}</span>
+                      <button 
+                        onClick={() => setQuantity(q => q + 1)}
+                        className="text-white hover:text-orange-500 transition-colors p-1"
+                      >
+                        <Plus size={18} />
+                      </button>
                     </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                  </div>
+                  
+                  <div className="text-right flex flex-col items-end">
+                    <p className="text-gray-400 text-[10px] font-black uppercase tracking-widest mb-1">Total</p>
+                    <div className="flex flex-col items-end">
+                      {quantity >= 3 && (
+                        <span className="text-orange-400 text-[10px] font-black line-through opacity-50">
+                          ${(pizza.price * quantity).toFixed(2)}
+                        </span>
+                      )}
+                      <p className="text-3xl sm:text-4xl font-black text-white tabular-nums">
+                        ${(quantity >= 3 ? (pizza.price * quantity * 0.9) : (pizza.price * quantity)).toFixed(2)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
 
-              <button 
-                onClick={handleAddToCart}
-                disabled={isAdded}
-                className={`w-full flex items-center justify-center gap-3 font-black py-5 rounded-4xl transition-all transform active:scale-95 shadow-xl ${
-                  isAdded 
-                  ? 'bg-green-500 text-white cursor-default' 
-                  : 'bg-orange-600 hover:bg-orange-500 text-white shadow-orange-900/40'
-                }`}
-              >
-                {isAdded ? (
-                  <>
-                    <CheckCircle size={20} className="animate-bounce" />
-                    <span>ADDED TO ORDER!</span>
-                  </>
-                ) : (
-                  <>
-                    <ShoppingCart size={20} />
-                    <span>ADD TO ORDER</span>
-                    <ChevronRight size={20} />
-                  </>
-                )}
-              </button>
+                <AnimatePresence>
+                  {quantity >= 3 && (
+                    <motion.div 
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="flex items-center gap-3 bg-orange-500/10 border border-orange-500/20 p-2 sm:p-3 rounded-xl text-orange-500">
+                        <Tag size={14} />
+                        <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider">
+                          10% Bulk Discount Applied! (3+ Pizzas)
+                        </span>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                <button 
+                  onClick={handleAddToCart}
+                  disabled={isAdded}
+                  className={`w-full flex items-center justify-center gap-3 font-black py-4 lg:py-5 rounded-3xl lg:rounded-4xl transition-all transform active:scale-95 shadow-xl ${
+                    isAdded 
+                    ? 'bg-green-500 text-white cursor-default' 
+                    : 'bg-orange-600 hover:bg-orange-500 text-white shadow-orange-900/40'
+                  }`}
+                >
+                  {isAdded ? (
+                    <>
+                      <CheckCircle size={20} className="animate-bounce" />
+                      <span>ADDED!</span>
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingCart size={20} />
+                      <span>ADD TO ORDER</span>
+                      <ChevronRight size={20} />
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         </motion.div>

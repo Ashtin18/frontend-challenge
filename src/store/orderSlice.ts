@@ -6,6 +6,7 @@ interface OrderState {
   currentOrder: OrderItem[];
   orderHistory: Order[];
   loading: boolean;
+  isCartOpen: boolean;
 }
 
 const loadOrderHistory = (): Order[] => {
@@ -22,6 +23,7 @@ const initialState: OrderState = {
   currentOrder: loadCurrentOrder(),
   orderHistory: loadOrderHistory(),
   loading: false,
+  isCartOpen: false,
 };
 
 const calculateItemTotals = (item: { pizza: Pizza; quantity: number }): OrderItem => {
@@ -86,6 +88,12 @@ const orderSlice = createSlice({
       localStorage.setItem('pizza_orders', JSON.stringify(state.orderHistory));
       localStorage.removeItem('pizza_current_order');
     },
+    toggleCart: (state) => {
+      state.isCartOpen = !state.isCartOpen;
+    },
+    setCartOpen: (state, action: PayloadAction<boolean>) => {
+      state.isCartOpen = action.payload;
+    },
   },
 });
 
@@ -95,6 +103,8 @@ export const {
   updateQuantity, 
   clearOrder, 
   addOrderToHistory,
-  setLoading 
+  setLoading,
+  toggleCart,
+  setCartOpen
 } = orderSlice.actions;
 export default orderSlice.reducer;

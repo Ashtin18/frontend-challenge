@@ -106,6 +106,10 @@ Custom pizza creation is handled by **React Hook Form** and **Zod**:
 - **Aesthetics**: Modern **Glassmorphism** style using white semi-transparent backgrounds and backdrop-filters.
 - **Animations**: Orchestrated with **Framer Motion** for layout transitions and micro-interactions (like adding to cart).
 - **Responsive**: Mobile-first design using **Tailwind CSS 4.0**.
+- **Mobile Experience**:
+  - **Drawer Cart**: On mobile, the order summary transforms into a smooth bottom-drawer accessible from any page.
+  - **Sticky Action Bar**: Pizza details page features a fixed action bar on mobile for immediate quantity adjustment and adding to cart.
+  - **Hamburger Menu**: Clean site navigation for small screens with orchestrated animations.
 - **UX Flow**: Clickable cards for quick access, quantity selectors with instant price feedback, and clear success/error states.
 
 ---
