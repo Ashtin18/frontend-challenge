@@ -8,7 +8,8 @@ import {
   Terminal,
   Database,
   BarChart3,
-  MousePointer2
+  MousePointer2,
+  BookOpen
 } from 'lucide-react';
 
 const About = () => {
@@ -42,6 +43,11 @@ const About = () => {
       title: "UX & Interactions",
       icon: <MousePointer2 className="text-red-600" />,
       content: "High-performance interactions: whole-card transitions, live form previews, and immediate visual feedback on all user actions."
+    },
+    {
+      title: "External Docs",
+      icon: <BookOpen className="text-orange-600" />,
+      content: "Visit our dedicated documentation site: ashtin18-frontend-challenge-96.mintlify.app"
     }
   ];
 
@@ -58,9 +64,19 @@ const About = () => {
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900 leading-none mb-6 tracking-tighter uppercase">
           Technical <span className="text-orange-600 underline decoration-4 md:decoration-8 decoration-orange-200 underline-offset-4 md:underline-offset-8">Overview</span>
         </h1>
-        <p className="text-xl text-gray-500 font-medium max-w-2xl mx-auto leading-relaxed">
+        <p className="text-xl text-gray-500 font-medium max-w-2xl mx-auto leading-relaxed mb-8">
           This project represents a state-of-the-art frontend architecture designed for performance, scalability, and an exceptional user experience.
         </p>
+
+        <a 
+          href="https://ashtin18-frontend-challenge-96.mintlify.app/introduction" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white font-black px-6 py-3 rounded-2xl transition-all active:scale-95 shadow-xl hover:shadow-gray-200"
+        >
+          <BookOpen size={20} />
+          VIEW DOCUMENTATION
+        </a>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">

@@ -2,6 +2,8 @@
 
 A premium, high-performance Single Page Application (SPA) for ordering pizzas, built with **React 18**, **TypeScript**, and **Redux Toolkit**.
 
+📚 **Official Documentation**: [View here](https://ashtin18-frontend-challenge-96.mintlify.app/introduction)
+
 ![Dashboard Preview](https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=2070&auto=format&fit=crop)
 
 ---
