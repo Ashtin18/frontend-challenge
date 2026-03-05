@@ -5,7 +5,7 @@
     "price": 10,
     "ingredients": ["Tomato", "Mozzarella", "Basil"],
     "category": "Vegetarian",
-    "imageUrl": "https://images.unsplash.com/photo-1574071318508-1cdbad80ad38?auto=format&fit=crop&w=800&q=80",
+    "imageUrl": "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=800&q=80",
     "isRecommended": true
   },
   {
@@ -41,7 +41,7 @@
     "price": 14,
     "ingredients": ["BBQ Sauce", "Mozzarella", "Chicken", "Red Onion"],
     "category": "Meat",
-    "imageUrl": "https://images.unsplash.com/photo-1565299507177-b0ac66763828?auto=format&fit=crop&w=800&q=80",
+    "imageUrl": "https://images.unsplash.com/photo-1541745537411-b8046dc6d66c?auto=format&fit=crop&w=800&q=80",
     "isRecommended": false
   },
   {
