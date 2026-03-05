@@ -1,23 +1,33 @@
-import { Plus, Info, Star } from 'lucide-react';
+import { Plus, Info, Star, CheckCircle } from 'lucide-react';
 import type { Pizza } from '../../types/index.ts';
 import { useAppDispatch } from '../../store/index.ts';
 import { addToOrder } from '../../store/orderSlice.ts';
-import { Link } from 'react-router-dom';
 
 interface PizzaCardProps {
   pizza: Pizza;
 }
 
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+
 const PizzaCard = ({ pizza }: PizzaCardProps) => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const [isAdded, setIsAdded] = useState(false);
 
-  const handleAddClick = () => {
+  const handleAddClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent navigating to details
     dispatch(addToOrder({ pizza, quantity: 1 }));
+    setIsAdded(true);
+    setTimeout(() => setIsAdded(false), 2000);
   };
 
   return (
-    <div className="group relative flex flex-col bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden">
-      {/* Image Container */}
+    <div 
+      onClick={() => navigate(`/pizza/${pizza.id}`)}
+      className="group relative flex flex-col bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden cursor-pointer"
+    >
+      {/* ... existing image container ... */}
       <div className="relative aspect-[4/3] overflow-hidden">
         <img
           src={pizza.imageUrl}
@@ -26,7 +36,6 @@ const PizzaCard = ({ pizza }: PizzaCardProps) => {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         
-        {/* Badges */}
         <div className="absolute top-3 left-3 flex flex-col gap-2">
           {pizza.isRecommended && (
             <span className="flex items-center gap-1 bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-1 rounded-full shadow-sm">
@@ -40,7 +49,6 @@ const PizzaCard = ({ pizza }: PizzaCardProps) => {
         </div>
       </div>
 
-      {/* Content */}
       <div className="p-5 flex flex-col flex-grow">
         <div className="flex justify-between items-start mb-2">
           <h3 className="text-lg font-bold text-gray-900 leading-tight group-hover:text-orange-600 transition-colors">
@@ -55,23 +63,32 @@ const PizzaCard = ({ pizza }: PizzaCardProps) => {
           {pizza.ingredients.join(', ')}
         </p>
 
-        {/* Actions */}
         <div className="flex items-center gap-2 mt-auto">
           <button
             onClick={handleAddClick}
-            className="flex-grow flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2.5 px-4 rounded-xl transition-all active:scale-95 shadow-lg shadow-orange-200"
+            disabled={isAdded}
+            className={`w-full flex items-center justify-center gap-2 font-black py-2.5 px-4 rounded-xl transition-all active:scale-95 shadow-lg ${
+              isAdded 
+              ? 'bg-green-500 text-white cursor-default' 
+              : 'bg-orange-500 hover:bg-orange-600 text-white shadow-orange-200'
+            }`}
           >
-            <Plus size={18} />
-            <span className='text-xs'>Add to Order</span>
+            {isAdded ? (
+              <>
+                <CheckCircle size={18} className="animate-bounce" />
+                <span className='text-xs font-bold uppercase'>Added!</span>
+              </>
+            ) : (
+              <>
+                <Plus size={18} />
+                <span className='text-xs font-bold'>Add to Order</span>
+              </>
+            )}
           </button>
           
-          <Link
-            to={`/pizza/${pizza.id}`}
-            className="p-2.5 text-gray-400 hover:text-orange-500 hover:bg-orange-50 bg-gray-50 rounded-xl transition-all"
-            title="View Details"
-          >
+          <div className="p-2.5 text-gray-400 group-hover:text-orange-500 group-hover:bg-orange-50 bg-gray-50 rounded-xl transition-all">
             <Info size={20} />
-          </Link>
+          </div>
         </div>
       </div>
     </div>

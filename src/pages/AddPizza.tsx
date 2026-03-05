@@ -28,16 +28,21 @@ const AddPizza = () => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors }
   } = useForm<PizzaFormValues>({
     resolver: zodResolver(pizzaSchema),
     defaultValues: {
+      name: '',
       category: 'Vegetarian',
       isRecommended: false,
       price: 15,
+      ingredients: '',
       imageUrl: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=2070&auto=format&fit=crop'
     },
   });
+
+  const watchedValues = watch();
 
   const onSubmit = async (data: PizzaFormValues) => {
     setIsSubmitting(true);
@@ -86,17 +91,36 @@ const AddPizza = () => {
               Be sure to use High-Quality images!
             </p>
             
-            <div className="bg-orange-50 p-6 rounded-3xl border border-orange-100">
-              <div className="flex items-center gap-4 text-orange-700 mb-4">
-                <PizzaIcon className="h-6 w-6" />
-                <span className="font-black uppercase tracking-tighter text-sm">Preview Card</span>
+            <div className="bg-white/60 backdrop-blur-md p-6 rounded-3xl border border-white/20 shadow-xl">
+              <div className="flex items-center gap-4 text-gray-900 mb-6 font-black uppercase tracking-tighter text-sm">
+                <PizzaIcon className="h-5 w-5 text-orange-600" />
+                <span>Menu Preview</span>
               </div>
-              <div className="aspect-4/3 bg-white rounded-2xl border border-orange-100 flex items-center justify-center overflow-hidden">
-                 <img 
-                   src="https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?q=80&w=1935&auto=format&fit=crop" 
-                   className="w-full h-full object-cover opacity-50 grayscale"
-                   alt="Preview"
-                 />
+              
+              <div className="rounded-2xl overflow-hidden mb-4 aspect-video relative group">
+                <img 
+                  src={watchedValues.imageUrl || 'https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=2070&auto=format&fit=crop'} 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  alt="Preview"
+                />
+                <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] font-black text-orange-600 shadow-lg">
+                  ${watchedValues.price?.toFixed(2) || '0.00'}
+                </div>
+              </div>
+
+              <h3 className="text-xl font-black text-gray-900 uppercase tracking-tighter truncate">
+                {watchedValues.name || 'Your Pizza Name'}
+              </h3>
+              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">
+                {watchedValues.category} Category
+              </p>
+              
+              <div className="flex flex-wrap gap-1">
+                {(watchedValues.ingredients || 'Tomato, Cheese').split(',').slice(0, 3).map((ing, i) => (
+                  <span key={i} className="text-[9px] font-black bg-gray-100 text-gray-500 px-2 py-1 rounded-lg uppercase">
+                    {ing.trim()}
+                  </span>
+                ))}
               </div>
             </div>
           </motion.div>

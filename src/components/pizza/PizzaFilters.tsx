@@ -51,7 +51,7 @@ const PizzaFilters = () => {
           <input
             type="range"
             min="0"
-            max="30"
+            max="50"
             step="1"
             className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-orange-500"
             value={filters.maxPrice}

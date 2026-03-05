@@ -5,18 +5,30 @@ import type { OrderItem, Pizza, Order } from '../types';
 interface OrderState {
   currentOrder: OrderItem[];
   orderHistory: Order[];
+  loading: boolean;
 }
 
+const loadOrderHistory = (): Order[] => {
+  const saved = localStorage.getItem('pizza_orders');
+  return saved ? JSON.parse(saved) : [];
+};
+
+const loadCurrentOrder = (): OrderItem[] => {
+  const saved = localStorage.getItem('pizza_current_order');
+  return saved ? JSON.parse(saved) : [];
+};
+
 const initialState: OrderState = {
-  currentOrder: [],
-  orderHistory: [], // Would be loaded from localStorage in a real implementation
+  currentOrder: loadCurrentOrder(),
+  orderHistory: loadOrderHistory(),
+  loading: false,
 };
 
 const calculateItemTotals = (item: { pizza: Pizza; quantity: number }): OrderItem => {
   const originalLinePrice = item.pizza.price * item.quantity;
   let discountAmount = 0;
 
-  // Discount Logic: 3 or more of the same pizza = 10% discount on that line item
+  // Discount: 10% for 3+ items of the same pizza
   if (item.quantity >= 3) {
     discountAmount = originalLinePrice * 0.1;
   }
@@ -35,6 +47,9 @@ const orderSlice = createSlice({
   name: 'order',
   initialState,
   reducers: {
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      state.loading = action.payload;
+    },
     addToOrder: (state, action: PayloadAction<{ pizza: Pizza; quantity: number }>) => {
       const existingItemIndex = state.currentOrder.findIndex(
         (item) => item.pizza.id === action.payload.pizza.id
@@ -46,9 +61,11 @@ const orderSlice = createSlice({
       } else {
         state.currentOrder.push(calculateItemTotals(action.payload));
       }
+      localStorage.setItem('pizza_current_order', JSON.stringify(state.currentOrder));
     },
     removeFromOrder: (state, action: PayloadAction<string>) => {
       state.currentOrder = state.currentOrder.filter((item) => item.pizza.id !== action.payload);
+      localStorage.setItem('pizza_current_order', JSON.stringify(state.currentOrder));
     },
     updateQuantity: (state, action: PayloadAction<{ pizzaId: string; quantity: number }>) => {
       const item = state.currentOrder.find((item) => item.pizza.id === action.payload.pizzaId);
@@ -57,35 +74,27 @@ const orderSlice = createSlice({
         const updatedItem = calculateItemTotals(item);
         Object.assign(item, updatedItem);
       }
+      localStorage.setItem('pizza_current_order', JSON.stringify(state.currentOrder));
     },
     clearOrder: (state) => {
       state.currentOrder = [];
+      localStorage.removeItem('pizza_current_order');
     },
-    confirmOrder: (state) => {
-      if (state.currentOrder.length === 0) return;
-
-      const subtotal = state.currentOrder.reduce((acc, item) => acc + item.originalLinePrice, 0);
-      const totalDiscount = state.currentOrder.reduce((acc, item) => acc + item.discountAmount, 0);
-      const finalTotal = subtotal - totalDiscount;
-
-      const newOrder: Order = {
-        id: crypto.randomUUID(),
-        items: [...state.currentOrder],
-        subtotal,
-        totalDiscount,
-        finalTotal,
-        timestamp: new Date().toISOString(),
-      };
-
-      state.orderHistory.push(newOrder);
+    addOrderToHistory: (state, action: PayloadAction<Order>) => {
+      state.orderHistory.push(action.payload);
       state.currentOrder = [];
-      
-      // Simulate saving to orders.json by updating localStorage
-      const savedOrders = JSON.parse(localStorage.getItem('pizza_orders') || '[]');
-      localStorage.setItem('pizza_orders', JSON.stringify([...savedOrders, newOrder]));
+      localStorage.setItem('pizza_orders', JSON.stringify(state.orderHistory));
+      localStorage.removeItem('pizza_current_order');
     },
   },
 });
 
-export const { addToOrder, removeFromOrder, updateQuantity, clearOrder, confirmOrder } = orderSlice.actions;
+export const { 
+  addToOrder, 
+  removeFromOrder, 
+  updateQuantity, 
+  clearOrder, 
+  addOrderToHistory,
+  setLoading 
+} = orderSlice.actions;
 export default orderSlice.reducer;

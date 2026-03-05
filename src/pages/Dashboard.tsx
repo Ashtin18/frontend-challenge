@@ -10,17 +10,26 @@ const Dashboard = () => {
 
   const filteredPizzas = pizzas
     .filter((pizza: Pizza) => {
-      const matchesSearch = pizza.name.toLowerCase().includes(filters.search.toLowerCase()) || 
-                            pizza.ingredients.some((i: string) => i.toLowerCase().includes(filters.search.toLowerCase()));
+      const searchTerm = filters.search.toLowerCase().trim();
+      const matchesSearch = !searchTerm || 
+                            pizza.name.toLowerCase().includes(searchTerm) || 
+                            pizza.ingredients.some((i: string) => i.toLowerCase().includes(searchTerm));
       const matchesCategory = filters.category === 'all' || pizza.category === filters.category;
-      const matchesPrice = pizza.price <= filters.maxPrice;
+      
+      // Ensure we compare numbers
+      const pizzaPrice = Number(pizza.price);
+      const maxPrice = Number(filters.maxPrice);
+      const matchesPrice = pizzaPrice <= maxPrice;
+      
       return matchesSearch && matchesCategory && matchesPrice;
     })
     .sort((a: Pizza, b: Pizza) => {
       if (filters.sortBy === 'name-asc') return a.name.localeCompare(b.name);
       if (filters.sortBy === 'name-desc') return b.name.localeCompare(a.name);
-      if (filters.sortBy === 'price-asc') return a.price - b.price;
-      if (filters.sortBy === 'price-desc') return b.price - a.price;
+      const priceA = Number(a.price);
+      const priceB = Number(b.price);
+      if (filters.sortBy === 'price-asc') return priceA - priceB;
+      if (filters.sortBy === 'price-desc') return priceB - priceA;
       return 0;
     });
 
@@ -37,14 +46,13 @@ const Dashboard = () => {
         </div>
         
         <div className="hidden lg:flex gap-4">
-           {/* Decorative elements or stats could go here */}
            <div className="bg-white/70 backdrop-blur-md p-6 rounded-3xl border border-white/20 shadow-xl flex flex-col items-center">
-             <span className="text-4xl font-black text-orange-600">6+</span>
+             <span className="text-4xl font-black text-orange-600">{pizzas.length}</span>
              <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Varieties</span>
            </div>
            <div className="bg-white/70 backdrop-blur-md p-6 rounded-3xl border border-white/20 shadow-xl flex flex-col items-center">
              <span className="text-4xl font-black text-gray-900">100%</span>
-             <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Natural</span>
+             <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Premium</span>
            </div>
         </div>
       </div>

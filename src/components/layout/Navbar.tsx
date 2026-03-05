@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ShoppingCart, Pizza as PizzaIcon, PlusCircle, LayoutDashboard, BarChart2 } from 'lucide-react';
+import { ShoppingCart, Pizza as PizzaIcon, PlusCircle, LayoutDashboard, BarChart2, HelpCircle } from 'lucide-react';
 import { useAppSelector } from '../../store/index.ts';
 import type { OrderItem } from '../../types/index.ts';
 
@@ -32,6 +32,10 @@ const Navbar = () => {
             <Link to="/analytics" className="flex items-center space-x-1 text-gray-600 hover:text-orange-500 transition-colors">
               <BarChart2 size={20} />
               <span>Analytics</span>
+            </Link>
+            <Link to="/about" className="flex items-center space-x-1 text-gray-600 hover:text-orange-500 transition-colors">
+              <HelpCircle size={20} />
+              <span>About</span>
             </Link>
           </div>
 

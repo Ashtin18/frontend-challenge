@@ -1,21 +1,46 @@
-import { Trash2, Plus, Minus, CheckCircle, CreditCard, ChevronRight } from 'lucide-react';
+import { Trash2, Plus, Minus, CheckCircle, CreditCard, ChevronRight, Loader2 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../store/index.ts';
-import { updateQuantity, removeFromOrder, confirmOrder } from '../../store/orderSlice.ts';
-import type { OrderItem } from '../../types/index.ts';
+import { updateQuantity, removeFromOrder, addOrderToHistory, setLoading } from '../../store/orderSlice.ts';
+import type { OrderItem, Order } from '../../types/index.ts';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from 'react';
 
 const OrderSummary = () => {
   const dispatch = useAppDispatch();
-  const { currentOrder } = useAppSelector((state) => state.order);
+  const { currentOrder, loading } = useAppSelector((state) => state.order);
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  // Reset success state when a new item is added to the order
+  useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout>;
+    if (currentOrder.length > 0 && showSuccess) {
+      timeout = setTimeout(() => setShowSuccess(false), 0);
+    }
+    return () => clearTimeout(timeout);
+  }, [currentOrder.length, showSuccess]);
 
   const subtotal = currentOrder.reduce((acc: number, item: OrderItem) => acc + item.originalLinePrice, 0);
   const totalDiscount = currentOrder.reduce((acc: number, item: OrderItem) => acc + item.discountAmount, 0);
   const finalTotal = subtotal - totalDiscount;
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (currentOrder.length === 0) return;
-    dispatch(confirmOrder());
-    alert('Order confirmed successfully!');
+    
+    dispatch(setLoading(true));
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    const newOrder: Order = {
+      id: crypto.randomUUID(),
+      items: [...currentOrder],
+      subtotal,
+      totalDiscount,
+      finalTotal,
+      timestamp: new Date().toISOString(),
+    };
+
+    dispatch(addOrderToHistory(newOrder));
+    dispatch(setLoading(false));
+    setShowSuccess(true);
   };
 
   return (
@@ -34,7 +59,25 @@ const OrderSummary = () => {
       </div>
 
       <div className="p-6">
-        {currentOrder.length === 0 ? (
+        {showSuccess ? (
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="py-12 text-center"
+          >
+            <div className="bg-green-100 text-green-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+              <CheckCircle size={40} />
+            </div>
+            <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tighter mb-2">Order Confirmed!</h3>
+            <p className="text-gray-500 text-sm mb-6">Your delicious pizza is being prepared. Check Analytics to see your order history!</p>
+            <button 
+              onClick={() => setShowSuccess(false)}
+              className="text-orange-600 font-bold uppercase tracking-widest text-[10px] hover:underline"
+            >
+              Start New Order
+            </button>
+          </motion.div>
+        ) : currentOrder.length === 0 ? (
           <div className="py-12 text-center">
             <CreditCard className="mx-auto h-16 w-16 text-gray-200 mb-4" strokeWidth={1} />
             <p className="text-gray-400 font-medium">Your basket is hungry...</p>
@@ -60,7 +103,10 @@ const OrderSummary = () => {
                        {item.discountAmount > 0 ? (
                          <>
                            <span className="text-xs line-through text-gray-400">${item.originalLinePrice.toFixed(2)}</span>
-                           <span className="text-sm font-black text-green-600 uppercase tracking-tighter">Sale: ${item.finalLineTotal.toFixed(2)}</span>
+                            <span className="text-sm font-black text-green-600 uppercase tracking-tighter">
+                              Sale: ${item.finalLineTotal.toFixed(2)} 
+                              <span className="ml-1 text-[10px]">(-${item.discountAmount.toFixed(2)})</span>
+                            </span>
                          </>
                        ) : (
                          <span className="text-sm font-bold text-gray-600">${item.finalLineTotal.toFixed(2)}</span>
@@ -125,10 +171,20 @@ const OrderSummary = () => {
 
             <button
               onClick={handleConfirm}
-              className="w-full mt-6 group flex items-center justify-center gap-3 bg-gray-900 hover:bg-orange-500 text-white font-black py-4 rounded-2xl transition-all duration-300 transform active:scale-95 shadow-xl shadow-gray-200 hover:shadow-orange-200"
+              disabled={loading}
+              className="w-full mt-6 group flex items-center justify-center gap-3 bg-gray-900 hover:bg-orange-500 text-white font-black py-4 rounded-2xl transition-all duration-300 transform active:scale-95 shadow-xl shadow-gray-200 hover:shadow-orange-200 disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              <span>CONFIRM ORDER</span>
-              <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              {loading ? (
+                <>
+                  <Loader2 className="animate-spin h-5 w-5" />
+                  <span>PROCESSING...</span>
+                </>
+              ) : (
+                <>
+                  <span>CONFIRM ORDER</span>
+                  <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </>
+              )}
             </button>
           </div>
         )}
